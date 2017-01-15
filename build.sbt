@@ -1,56 +1,66 @@
-import android.Keys._
+scalaVersion := "2.11.8"
+dexMaxHeap := "4g"
 
-import android.Dependencies.{apklib,aar}
-
-android.Plugin.androidBuild
-
-platformTarget in Android := "android-21"
+enablePlugins(AndroidApp)
+android.useSupportVectors
 
 name := "shadowsocks"
+version := "3.4.2"
+versionCode := Some(174)
 
-compileOrder in Compile := CompileOrder.JavaThenScala
+platformTarget := "android-25"
 
-ndkJavah in Android := List()
+compileOrder := CompileOrder.JavaThenScala
+javacOptions ++= "-source" :: "1.7" :: "-target" :: "1.7" :: Nil
+scalacOptions ++= "-target:jvm-1.7" :: "-Xexperimental" :: Nil
 
-ndkBuild in Android := List()
+proguardVersion := "5.3.2"
+proguardCache := Seq()
+proguardOptions ++=
+  "-keep class com.github.shadowsocks.System { *; }" ::
+  "-dontwarn com.google.android.gms.internal.**" ::
+  "-dontwarn com.j256.ormlite.**" ::
+  "-dontwarn okio.**" ::
+  "-dontwarn org.xbill.**" ::
+  Nil
 
-typedResources in Android := false
+shrinkResources := true
+typedResources := false
+resConfigs := Seq("ja", "ru", "zh-rCN", "zh-rTW")
 
+val supportLibsVersion = "25.1.0"
+val playServicesVersion = "10.0.1"
 resolvers += Resolver.jcenterRepo
+libraryDependencies ++=
+  "com.android.support" % "cardview-v7" % supportLibsVersion ::
+  "com.android.support" % "customtabs" % supportLibsVersion ::
+  "com.android.support" % "design" % supportLibsVersion ::
+  "com.android.support" % "gridlayout-v7" % supportLibsVersion ::
+  "com.android.support" % "preference-v14" % supportLibsVersion ::
+  "com.futuremind.recyclerfastscroll" % "fastscroll" % "0.2.5" ::
+  "com.evernote" % "android-job" % "1.1.4" ::
+  "com.github.jorgecastilloprz" % "fabprogresscircle" % "1.01" ::
+  "com.google.android.gms" % "play-services-ads" % playServicesVersion ::
+  "com.google.android.gms" % "play-services-analytics" % playServicesVersion ::
+  "com.google.android.gms" % "play-services-gcm" % playServicesVersion ::
+  "com.j256.ormlite" % "ormlite-android" % "5.0" ::
+  "com.mikepenz" % "crossfader" % "1.5.0" ::
+  "com.mikepenz" % "fastadapter" % "2.1.5" ::
+  "com.mikepenz" % "iconics-core" % "2.8.2" ::
+  "com.mikepenz" % "materialdrawer" % "5.8.1" ::
+  "com.mikepenz" % "materialize" % "1.0.0" ::
+  "com.squareup.okhttp3" % "okhttp" % "3.5.0" ::
+  "com.twofortyfouram" % "android-plugin-api-for-locale" % "1.0.2" ::
+  "dnsjava" % "dnsjava" % "2.1.7" ::
+  "eu.chainfire" % "libsuperuser" % "1.0.0.201608240809" ::
+  "net.glxn.qrgen" % "android" % "2.0" ::
+  Nil
 
-resolvers += "JRAF" at "http://JRAF.org/static/maven/2"
-
-libraryDependencies ++= Seq(
-  "dnsjava" % "dnsjava" % "2.1.7",
-  "com.github.kevinsawicki" % "http-request" % "5.6",
-  "commons-net" % "commons-net" % "3.3",
-  "com.google.zxing" % "android-integration" % "3.1.0"
-)
-
-libraryDependencies ++= Seq(
-  "com.joanzapata.android" % "android-iconify" % "1.0.9",
-  "net.glxn.qrgen" % "android" % "2.0",
-  "net.simonvt.menudrawer" % "menudrawer" % "3.0.6",
-  "com.google.android.gms" % "play-services-base" % "6.5.87",
-  "com.google.android.gms" % "play-services-ads" % "6.5.87",
-  "com.android.support" % "support-v4" % "21.0.3"
-)
-
-libraryDependencies ++= Seq(
-  "com.github.mrengineer13" % "snackbar" % "0.5.0",
-  "com.nostra13.universalimageloader" % "universal-image-loader" % "1.8.4",
-  "com.j256.ormlite" % "ormlite-core" % "4.47",
-  "com.j256.ormlite" % "ormlite-android" % "4.47"
-)
-
-proguardOptions in Android ++= Seq("-keep class android.support.v4.app.** { *; }",
-          "-keep interface android.support.v4.app.** { *; }",
-          "-keep class com.actionbarsherlock.** { *; }",
-          "-keep interface com.actionbarsherlock.** { *; }",
-          "-keep class org.jraf.android.backport.** { *; }",
-          "-keep class com.github.shadowsocks.** { *; }",
-          "-keep class * extends com.j256.ormlite.** { *; }",
-          "-keep class com.joanzapata.** { *; }",
-          "-keepattributes *Annotation*",
-          "-dontwarn org.xbill.**",
-          "-dontwarn com.actionbarsherlock.**")
+lazy val nativeBuild = TaskKey[Unit]("native-build", "Build native executables")
+nativeBuild := {
+  val logger = streams.value.log
+  Process("./build.sh") ! logger match {
+    case 0 => // Success!
+    case n => sys.error(s"Native build script exit code: $n")
+  }
+}

@@ -1,77 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-   Zirco Browser for Android
-  
-   Copyright (C) 2010 - 2011 J. Devauchelle and contributors.
- 
-   This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License
-   version 3 as published by the Free Software Foundation.
- 
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
--->
 
 <resources>
 
-    <style name="Theme.AppManager" parent="@style/Theme.Shadow">
+    <style name="Toolbar.Logo" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">24sp</item>
     </style>
 
-    <style name="PopupTheme" parent="@android:style/Theme.Holo.Light">
-        <item name="android:windowActionBar">false</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowFrame">@null</item>
-        <item name="android:windowIsFloating">false</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
-        <item name="android:windowSoftInputMode">stateAlwaysHidden</item>
-        <item name="android:windowActionModeOverlay">true</item>
-        <item name="android:colorBackgroundCacheHint">@null</item>
-        <item name="android:windowCloseOnTouchOutside">true</item>
-        <item name="android:windowIsTranslucent">true</item>
+    <style name="Theme.MaterialBase" parent="MaterialDrawerTheme.Light.DarkToolbar">
+        <!--suppress NewApi -->
+        <item name="android:navigationBarColor">@color/material_primary_700</item>
+        <item name="colorAccent">@color/material_accent_200</item>
+        <item name="colorButtonNormal">@color/material_accent_200</item>
+        <item name="colorPrimary">@color/material_primary_500</item>
+        <item name="colorPrimaryDark">@color/material_primary_700</item>
+        <item name="preferenceTheme">@style/Theme.Material.PreferenceThemeOverlay</item>
+
+        <item name="material_drawer_selected_text">@color/material_accent_200</item>
     </style>
 
-    <!-- Variation on the Light theme that turns off the title -->
-    <style name="Theme.Shadowsocks" parent="@style/Theme.Shadow">
-        <item name="menuDrawerStyle">@style/MenuDrawerStyle</item>
+    <style name="Theme.Material.Dialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/material_primary_500</item>
+        <item name="colorButtonNormal">@color/material_accent_200</item>
+        <item name="colorPrimary">@color/material_primary_500</item>
+        <item name="colorPrimaryDark">@color/material_primary_700</item>
+        <item name="preferenceTheme">@style/Theme.Material.PreferenceThemeOverlay</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="MenuDrawer"/>
-
-    <style name="MenuDrawer.Widget"/>
-
-    <style name="MenuDrawer.Widget.Category">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">?android:attr/textColorSecondaryInverse</item>
+    <!-- Fix for wrong padding on v17-v20 based on: https://github.com/Gericop/Android-Support-Preference-V7-Fix/blob/a6082cb/preference-v7/src/main/res/values-v17/styles.xml -->
+    <style name="Theme.Material" parent="Theme.MaterialBase">
+        <item name="android:listPreferredItemPaddingStart">16dp</item>
+        <item name="android:listPreferredItemPaddingEnd">16dp</item>
+    </style>
+    <!-- This is needed because the default PreferenceCategory appearance doesn't use bold text style -->
+    <style name="Preference_TextAppearanceMaterialBody2">
         <item name="android:textSize">14sp</item>
-        <item name="android:textAllCaps">true</item>
-
-        <item name="android:gravity">center_vertical</item>
-        <item name="android:paddingLeft">16dp</item>
-        <item name="android:background">@drawable/md__category_background</item>
-
-        <item name="android:singleLine">true</item>
-        <item name="android:ellipsize">end</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
-
-    <style name="MenuDrawer.Widget.Title">
-        <item name="android:background">@drawable/md__list_selector_holo_dark</item>
-        <item name="android:textAppearance">?android:attr/textAppearance</item>
-        <item name="android:textColor">?android:attr/textColorPrimaryInverse</item>
-        <item name="android:textSize">18sp</item>
-        <item name="android:paddingLeft">16dp</item>
-        <item name="android:paddingRight">32dp</item>
-        <item name="android:paddingTop">8dp</item>
-        <item name="android:paddingBottom">8dp</item>
-        <item name="android:drawablePadding">16dp</item>
-        <item name="android:gravity">center_vertical</item>
+    <style name="Theme.Material.PreferenceThemeOverlay" parent="@style/PreferenceThemeOverlay.v14.Material">
+        <item name="preferenceFragmentListStyle">@style/Theme.Material.PreferenceFragmentList</item>
     </style>
-
-    <style name="MenuDrawerStyle" parent="Widget.MenuDrawer">
-        <item name="mdActiveIndicator">@drawable/menu_arrow</item>
-        <item name="mdMenuSize">250dp</item>
+    <style name="Theme.Material.PreferenceFragmentList" parent="@style/PreferenceFragmentList.Material">
+        <item name="android:fadeScrollbars">true</item>
+        <item name="android:scrollbars">vertical</item>
+    </style>
+    <style name="NumberPickerStyle">
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="StyledScrollerTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
 </resources>

@@ -1,15 +1,16 @@
 package com.github.shadowsocks.aidl;
 
-import com.github.shadowsocks.aidl.Config;
 import com.github.shadowsocks.aidl.IShadowsocksServiceCallback;
 
 interface IShadowsocksService {
-  int getMode();
   int getState();
+  String getProfileName();
 
   oneway void registerCallback(IShadowsocksServiceCallback cb);
+  oneway void startListeningForBandwidth(IShadowsocksServiceCallback cb);
+  oneway void stopListeningForBandwidth(IShadowsocksServiceCallback cb);
   oneway void unregisterCallback(IShadowsocksServiceCallback cb);
 
-  oneway void start(in Config config);
-  oneway void stop();
+  oneway void use(in int profileId);
+  void useSync(in int profileId);
 }
